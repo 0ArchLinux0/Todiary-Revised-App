@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
 
   void initState() {
     super.initState();
-    // getData();
+    getData();
     print('init state todo list page');
   }
   @override
@@ -55,6 +55,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(title: Text('Todiary'), centerTitle: true,),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
           TextButton.icon(
               // onPressed: () => Navigator.pushNamed(context, '/location'),
@@ -62,33 +64,48 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.update),
           label: Text('refresh todolist'),
           ),
+          // Expanded(
+            // child: SizedBox(
+            //   height: 1200.0,
+            //   child:
           Expanded(
-            child: SizedBox(
-              height: 200.0,
               child: ListView.builder(
                   // padding: const EdgeInsets.all(8),
+                  // physics: NeverScrollableScrollPhysics(),
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
                   itemCount: todoItems.length,
                   itemBuilder: (BuildContext context, int idx) {
                     return Container(
                         // height: 50,
-                        margin: EdgeInsets.symmetric(vertical: 10.0),
-                        color: todoItems[idx]['completed'] ? Colors.red : Colors.amber[300],
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Row (
-                              children: <Widget> [
-                              Text(
-                                  todoItems[idx]['todo'],
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(decoration: todoItems[idx]['completed'] ? TextDecoration.lineThrough : TextDecoration.none )
+                        // margin: EdgeInsets.symmetric(vertical: 10.0),
+                        color: todoItems[idx]['completed'] ? Colors.red : Colors.white54,
+                        // padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Card(
+                                color: Colors.white,
+                                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+
+                                child: ListTile(
+                                  leading: Icon(
+                                    todoItems[idx]['completed'] ? Icons.check : Icons.home_work,
+                                    color: Colors.blue,
+                                    // size: 20,
+                                  ),
+                                  title: Text(
+                                      todoItems[idx]['todo'],
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(decoration: todoItems[idx]['completed'] ? TextDecoration.lineThrough : TextDecoration.none )
+                                  ),
+                                ),
+
                               )
-                            ]
-                        ),
                     );
                   }
               ),
-            ),
           ),
-          Expanded(
+            // ),
+          // ),
+          Container(
               child: new Align(
                   alignment: Alignment.bottomCenter,
                   child: new Row(
