@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -9,15 +11,38 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  List<String> todoItems = ["this is a test string", 'test string2'];
+  List<dynamic> todoItems = [
+    {
+      'todo': "this is a test string",
+      'completed': true,
+    },
+    {
+      'todo': 'test string2',
+      'completed': false,
+    },
+  ];
+  String date = '2021-05-20';
 
   void getData() async {
     // Uri endpoint = Uri.parse('https://api.todiary.ml:2083');
     // var query = { 'userOid': '60a4c9f8708c73536cb73f49', 'toGrab': ['todolist']},
     // Uri apiUrl = Uri.https('api.todiary.ml:2083', '/accountdata', query);
-    Uri apiUrl = Uri.https('api.todiary.ml:2083', '/accountdata', { 'userOid': '60a4c9f8708c73536cb73f49', 'toGrab[0]': 'todolist.2021-05-21'});
+    Uri apiUrl = Uri.https('api.todiary.ml:2083', '/accountdata',
+        {
+          'userOid': '60a4c9f8708c73536cb73f49',
+          'toGrab[0]': 'todolist.${date}',
+          // 'toGrab[1]': 'todolist.2021-05-22',
+        });
     Response res = await get(apiUrl);
-    print(res.body);
+    Map data = jsonDecode(res.body);
+    print(data['todolist'][date]);
+    // Map<String, String> todoMaps = data['todolist'][date]['todos'];
+    List todoMaps = data['todolist'][date]['todos'];
+    // todoMaps.forEach((key, value) { todoItems[key[]] })
+    setState(() {
+      // todoMaps.forEach((value) { todoItems.add(value['todo']); });
+      todoMaps.forEach((value) { todoItems.add(value); });
+    });
   }
 
   void initState() {
@@ -47,8 +72,17 @@ class _HomeState extends State<Home> {
                     return Container(
                         // height: 50,
                         margin: EdgeInsets.symmetric(vertical: 10.0),
-                        color: Colors.amber[300],
-                        child: Center(child: Text(todoItems[idx])),
+                        color: todoItems[idx]['completed'] ? Colors.red : Colors.amber[300],
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Row (
+                              children: <Widget> [
+                              Text(
+                                  todoItems[idx]['todo'],
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(decoration: todoItems[idx]['completed'] ? TextDecoration.lineThrough : TextDecoration.none )
+                              )
+                            ]
+                        ),
                     );
                   }
               ),
