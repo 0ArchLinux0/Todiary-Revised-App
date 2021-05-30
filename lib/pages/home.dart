@@ -53,8 +53,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Todiary'), centerTitle: true,),
-      body: Column(
+      // appBar: AppBar(title: Text('Todiary'), centerTitle: true,),
+      backgroundColor: Colors.amber[300],
+      body:
+      Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
@@ -81,24 +83,28 @@ class _HomeState extends State<Home> {
                         // margin: EdgeInsets.symmetric(vertical: 10.0),
                         color: todoItems[idx]['completed'] ? Colors.red : Colors.white54,
                         // padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Card(
-                                color: Colors.white,
-                                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                        child: GestureDetector(
+                          onTap: () => { setState(() => { todoItems[idx]['completed'] = !todoItems[idx]['completed'] })},
+                          child: Card(
+                                  color: Colors.white,
+                                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
 
-                                child: ListTile(
-                                  leading: Icon(
-                                    todoItems[idx]['completed'] ? Icons.check : Icons.home_work,
-                                    color: Colors.blue,
-                                    // size: 20,
+                                  child: ListTile(
+                                    leading: todoItems[idx]['completed'] ? Icon(
+                                      // todoItems[idx]['completed'] ? Icons.check : null, //Icons.home_work,
+                                      Icons.check, //Icons.home_work,
+                                      color: Colors.blue,
+                                      // size: 20,
+                                    ) : null,
+                                    title: Text(
+                                        todoItems[idx]['todo'],
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(decoration: todoItems[idx]['completed'] ? TextDecoration.lineThrough : TextDecoration.none )
+                                    ),
                                   ),
-                                  title: Text(
-                                      todoItems[idx]['todo'],
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(decoration: todoItems[idx]['completed'] ? TextDecoration.lineThrough : TextDecoration.none )
-                                  ),
+
                                 ),
-
-                              )
+                        )
                     );
                   }
               ),
